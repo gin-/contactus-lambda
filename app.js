@@ -28,7 +28,7 @@ app.post('/blackbird-home/contacts', function (req, res) {
         return;
     }
 
-    const bbEmail = 'ahrushko@blackbird-lab.com';
+    const bbEmail = 'info@blackbird-lab.com';
 
     const eParams = {
         Destination: {
@@ -40,12 +40,13 @@ app.post('/blackbird-home/contacts', function (req, res) {
                     Data: `<h3>New message from Contact Us on blackbird-lab.com:</h3></br></hr></br>
                             <p><b>From:</b> ${params.firstName} ${params.lastName}</p>
                             <p><b>Email:</b> ${params.email}</p>
+                            <p><b>Country:</b> ${params.country}</p>
                             <p><b>Message:</b></p>
-                            <p>${params.description}</p>`,
+                            <p>${params.message}</p>`,
                     Charset: "UTF8"
                 },
                 Text: {
-                    Data: `New message from Contact Us on blackbird-lab.com:\nFrom ${params.firstName} ${params.lastName}\n${params.description}\nPlease reply to email: ${params.email}`,
+                    Data: `New message from Contact Us on blackbird-lab.com:\nFrom ${params.firstName} ${params.lastName}\n${params.message}\nPlease reply to email: ${params.email}`,
                     Charset: "UTF8"
                 }
             },
@@ -85,6 +86,7 @@ app.post('/blackbird-home/contacts', function (req, res) {
 /*TODO: implement*/
 app.post('/blackbird/vac_apply', function (req, res) {
     console.log(req.body);
+    res.status(400).send("Not implemented yet");
     const params = req.body;
     if (!params.email) {
         console.log("Empty email. EMAIL WON'T BE SENT");
