@@ -1,16 +1,8 @@
-/*
-Copyright 2017 - 2017 Amazon.com, Inc. or its affiliates. All Rights Reserved.
-Licensed under the Apache License, Version 2.0 (the "License"). You may not use this file except in compliance with the License. A copy of the License is located at
-    http://aws.amazon.com/apache2.0/
-or in the "license" file accompanying this file. This file is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and limitations under the License.
-*/
-
 const express = require('express');
 const bodyParser = require('body-parser');
 const AWS = require('aws-sdk');
 const SES = new AWS.SES({
-    region: process.env.REGION
+    region: 'us-east-1'
 });
 
 // declare a new express app
@@ -27,15 +19,16 @@ app.use(function (req, res, next) {
 
 AWS.config.update({region: process.env.REGION});
 
-app.post('/blackbird/contacts', function (req, res) {
+app.post('/blackbird-home/contacts', function (req, res) {
     console.log(req.body);
     const params = req.body;
     if (!params.email) {
         console.log("Empty email. EMAIL WON'T BE SENT");
+        res.status(400).send("Empty email!");
         return;
     }
 
-    const bbEmail = 'info@blackbird-lab.com';
+    const bbEmail = 'ahrushko@blackbird-lab.com';
 
     const eParams = {
         Destination: {
@@ -71,7 +64,7 @@ app.post('/blackbird/contacts', function (req, res) {
     const email = SES.sendEmail(eParams, function (err, data) {
         if (err) {
             console.log(err);
-            res.json(err);
+            res.status(500).json(err);
         } else {
             console.log("===EMAIL SENT===");
             console.log(data);
@@ -89,8 +82,8 @@ app.post('/blackbird/contacts', function (req, res) {
     });
 });
 
-
-app.post('/blackbird/subscribe', function (req, res) {
+/*TODO: implement*/
+app.post('/blackbird/vac_apply', function (req, res) {
     console.log(req.body);
     const params = req.body;
     if (!params.email) {

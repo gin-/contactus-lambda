@@ -12,6 +12,8 @@
   },
   "devDependencies": {},
   "scripts": {
+    "package": "yarn install && rm archive.zip && zip archive.zip *  -r -x .git/\\* \\*.sh tests/\\* node_modules/aws-sdk/\\* \\*.zip",
+    "deploy": "aws lambda update-function-code --function-name blackbird-home --zip-file fileb://archive.zip --publish",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",
