@@ -76,7 +76,7 @@ app.post('/blackbird-home/vac_apply', function (req, res) {
     return;
   }
 
-  const bbEmail = 'info@blackbird-lab.com';
+  const bbEmail = 'hr@blackbird-lab.com';
 
   const mailOptions = {
     from: bbEmail,
