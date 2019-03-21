@@ -69,7 +69,7 @@ app.post('/blackbird-home/contacts', function (req, res) {
   });
 });
 
-app.post('/blackbird/vac_apply', function (req, res) {
+app.post('/blackbird-home/vac_apply', function (req, res) {
   if (!req.file) {
     console.log("Empty attachment. EMAIL WON'T BE SENT");
     res.status(400).send("Empty attachment!");
