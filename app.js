@@ -32,7 +32,7 @@ app.post('/blackbird-home/contacts', function (req, res) {
     return;
   }
 
-  const bbEmail = 'ahrushko@blackbird-lab.com';
+  const bbEmail = 'info@blackbird-lab.com';
 
   const mailOptions = {
     from: bbEmail,
@@ -76,7 +76,7 @@ app.post('/blackbird-home/vac_apply', function (req, res) {
     return;
   }
 
-  const bbEmail = 'ahrushko@blackbird-lab.com';
+  const bbEmail = 'info@blackbird-lab.com';
 
   const mailOptions = {
     from: bbEmail,
