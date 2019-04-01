@@ -60,7 +60,7 @@ app.post('/blackbird-home/contacts', function (req, res) {
 
   transporter.sendMail(mailOptions, function (err, info) {
     if (err) {
-      console.log("Error sending email");
+      console.log("Error sending email: ", err);
       res.status(500).send('Internal Error: The message is not accepted.');
     } else {
       console.log("Email sent successfully");
@@ -98,7 +98,7 @@ app.post('/blackbird-home/vac_apply', function (req, res) {
 
   transporter.sendMail(mailOptions, function (err, info) {
     if (err) {
-      console.log("Error sending email");
+      console.log("Error sending email: ", err);
       res.status(500).send('Internal Error: The message is not accepted.');
     } else {
       console.log("Email sent successfully");
