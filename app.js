@@ -24,87 +24,109 @@ app.use(function (req, res, next) {
 AWS.config.update({region: process.env.REGION});
 
 app.post('/blackbird-home/contacts', function (req, res) {
-  console.log(req.file);
-  const params = req.body;
-  if (!params.email) {
-    console.log("Empty email. EMAIL WON'T BE SENT");
-    res.status(400).send("Empty email!");
-    return;
-  }
+  try {
+    console.log(req.file);
+    const params = req.body;
+    if (!params.email) {
+      console.log("Empty email. EMAIL WON'T BE SENT");
+      res.status(400).send("Empty email!");
+      return;
+    }
 
-  const bbEmail = 'info@blackbird-lab.com';
+    const bbEmail = 'info@blackbird-lab.com';
 
-  const mailOptions = {
-    from: bbEmail,
-    replyTo: params.email,
-    to: bbEmail,
-    subject: `Contact us message from ${params.firstName} ${params.lastName}`,
-    html: `<h3>New message from Contact Us on blackbird-lab.com:</h3></br></hr></br>
+    const mailOptions = {
+      from: bbEmail,
+      replyTo: params.email,
+      to: bbEmail,
+      subject: `Contact us message from ${params.firstName} ${params.lastName}`,
+      html: `<h3>New message from Contact Us on blackbird-lab.com:</h3></br></hr></br>
                             <p><b>From:</b> ${params.firstName} ${params.lastName}</p>
                             <p><b>Email:</b> ${params.email}</p>
                             <p><b>Country:</b> ${params.country}</p>
                             <p><b>Message:</b></p>
                             <p>${params.message}</p>`,
-    text: `New message from Contact Us on blackbird-lab.com:\\nFrom ${params.firstName} ${params.lastName}\\n${params.message}\\nPlease reply to email: ${params.email}`,
-    attachments: [
-      {
-        filename: req.file.originalname,
-        content: req.file.buffer
+      text: `New message from Contact Us on blackbird-lab.com:\\nFrom ${params.firstName} ${params.lastName}\\n${params.message}\\nPlease reply to email: ${params.email}`,
+      attachments: [
+        {
+          filename: req.file.originalname,
+          content: req.file.buffer
+        }
+      ]
+    };
+
+    const transporter = nodemailer.createTransport({
+      SES: SES
+    });
+
+    transporter.sendMail(mailOptions, function (err, info) {
+      if (err) {
+        console.error("========================================================================");
+        console.log("Error sending email. Please react manually: ", err);
+        console.error("Request: ", req);
+        console.error("========================================================================");
+        res.status(200);
+      } else {
+        console.log("Email sent successfully");
+        res.sendStatus(200);
       }
-    ]
-  };
-
-  const transporter = nodemailer.createTransport({
-    SES: SES
-  });
-
-  transporter.sendMail(mailOptions, function (err, info) {
-    if (err) {
-      console.log("Error sending email: ", err);
-      res.status(500).send('Internal Error: The message is not accepted.');
-    } else {
-      console.log("Email sent successfully");
-      res.sendStatus(200);
-    }
-  });
+    });
+  } catch (e) {
+    console.error("========================================================================");
+    console.error("Exception during contact us: ", e);
+    console.error("Request: ", req);
+    console.error("========================================================================");
+    res.status(200);
+  }
 });
 
 app.post('/blackbird-home/vac_apply', function (req, res) {
-  if (!req.file) {
-    console.log("Empty attachment. EMAIL WON'T BE SENT");
-    res.status(400).send("Empty attachment!");
-    return;
-  }
-
-  const bbEmail = 'hr@blackbird-lab.com';
-
-  const mailOptions = {
-    from: bbEmail,
-    to: bbEmail,
-    subject: `New vacation application on Blackbird Home`,
-    html: `<h3>New vacation application on Blackbird Home (see attachment)</h3>`,
-    text: `New vacation application on Blackbird Home (see attachment)`,
-    attachments: [
-      {
-        filename: req.file.originalname,
-        content: req.file.buffer
-      }
-    ]
-  };
-
-  const transporter = nodemailer.createTransport({
-    SES: SES
-  });
-
-  transporter.sendMail(mailOptions, function (err, info) {
-    if (err) {
-      console.log("Error sending email: ", err);
-      res.status(500).send('Internal Error: The message is not accepted.');
-    } else {
-      console.log("Email sent successfully");
-      res.sendStatus(200);
+  try {
+    if (!req.file) {
+      console.log("Empty attachment. EMAIL WON'T BE SENT");
+      res.status(400).send("Empty attachment!");
+      return;
     }
-  });
+
+    const bbEmail = 'hr@blackbird-lab.com';
+
+    const mailOptions = {
+      from: bbEmail,
+      to: bbEmail,
+      subject: `New vacation application on Blackbird Home`,
+      html: `<h3>New vacation application on Blackbird Home (see attachment)</h3>`,
+      text: `New vacation application on Blackbird Home (see attachment)`,
+      attachments: [
+        {
+          filename: req.file.originalname,
+          content: req.file.buffer
+        }
+      ]
+    };
+
+    const transporter = nodemailer.createTransport({
+      SES: SES
+    });
+
+    transporter.sendMail(mailOptions, function (err, info) {
+      if (err) {
+        console.error("========================================================================");
+        console.log("Error sending email. Please react manually: ", err);
+        console.error("Request: ", req);
+        console.error("========================================================================");
+        res.status(200);
+      } else {
+        console.log("Email sent successfully");
+        res.sendStatus(200);
+      }
+    });
+  } catch (e) {
+    console.error("========================================================================");
+    console.error("Exception during vac apply: ", e);
+    console.error("Request: ", req);
+    console.error("========================================================================");
+    res.status(200);
+  }
 });
 
 app.listen(3000, function () {
